@@ -1,4 +1,4 @@
-import 'package:firebase_login/screens/login_screen.dart';
+import 'package:firebase_login/screens/init_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,17 +10,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         //buttonColor: Colors.red,
         buttonTheme: ButtonThemeData(
           buttonColor: Colors.red,
           height: 50.0,
-          splashColor: Colors.redAccent,
-          hoverColor: Colors.redAccent,
         ),
       ),
-      home: LoginScreen()
+      home: InitScreen(),
     );
   }
 }
