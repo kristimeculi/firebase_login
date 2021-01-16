@@ -2,6 +2,8 @@
 
 A new Flutter application.
 
+This project has been started on January 16 2021 , 10:00 AM.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
