@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "230927843659",
+    "firebase_url": "https://fir-loginapp-879bc.firebaseio.com",
+    "project_id": "fir-loginapp-879bc",
+    "storage_bucket": "fir-loginapp-879bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:230927843659:android:8ddcd1be2c904b223b28ce",
+        "android_client_info": {
+          "package_name": "com.kristimeculi.firebase_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "230927843659-djr7f5cdl0l1h5pe5l8ghf22lr1a6m6u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh_Fj5w5ujBtVdYRH5gkgV74vpj4fMTTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "230927843659-djr7f5cdl0l1h5pe5l8ghf22lr1a6m6u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

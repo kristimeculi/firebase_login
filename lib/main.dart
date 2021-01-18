@@ -1,26 +1,57 @@
-import 'package:firebase_login/screens/init_screen.dart';
-import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'blocs/authBloc/auth_bloc.dart';
+import 'blocs/authBloc/auth_event.dart';
+import 'package:meta/meta.dart';
+
+import 'blocs/authBloc/auth_state.dart';
+import 'repositories/user_repository.dart';
+import 'ui/pages/home_page.dart';
+import 'ui/pages/login_page.dart';
+import 'ui/pages/splash_page.dart';
+
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+  UserRepository userRepository = UserRepository();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
       theme: ThemeData(
-        //buttonColor: Colors.red,
-        buttonTheme: ButtonThemeData(
-          buttonColor: Colors.red,
-          height: 50.0,
-        ),
+        primarySwatch: Colors.blue,
       ),
-      home: InitScreen(),
+      home: BlocProvider(
+        create: (context) => AuthBloc(userRepository: userRepository)..add(AppStartedEvent()),
+        child: Appp(userRepository: userRepository,),
+      ),
     );
   }
 }
+
+class Appp extends StatelessWidget {
+
+  UserRepository userRepository;
+
+  Appp({@required this.userRepository});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is AuthInitialState) {
+          return SplashPage();
+        } else if (state is AuthenticatedState) {
+          return HomePageParent(user: state.user, userRepository: userRepository);
+        } else if (state is UnauthenticatedState) {
+          return LoginPageParent(userRepository: userRepository);
+        }
+      },
+    );
+  }
+}
+
 
