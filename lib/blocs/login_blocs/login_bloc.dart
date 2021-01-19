@@ -14,7 +14,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  // TODO: implement initialState
   LoginState get initialState => LoginInitialState();
 
   @override
@@ -23,10 +22,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginLoadingState();
       try {
         var user = await userRepository.signInEmailAndPassword(
-            event.email, event.password);
-        yield LoginSuccessState(user);
+            event.userModel);
+        yield LoginSuccessState(user: user);
       } catch (e) {
-        yield LoginFailState(e.toString());
+        yield LoginFailState(message: e.toString());
       }
     }
   }

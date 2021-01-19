@@ -1,19 +1,18 @@
-
+import 'package:firebase_login/screens/home_screen.dart';
+import 'package:firebase_login/screens/init_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'blocs/authBloc/auth_bloc.dart';
-import 'blocs/authBloc/auth_event.dart';
 import 'package:meta/meta.dart';
-
-import 'blocs/authBloc/auth_state.dart';
+import 'blocs/auth_blocs/auth_bloc.dart';
+import 'blocs/auth_blocs/auth_event.dart';
+import 'blocs/auth_blocs/auth_state.dart';
 import 'repositories/user_repository.dart';
-import 'ui/pages/home_page.dart';
-import 'ui/pages/login_page.dart';
-import 'ui/pages/splash_page.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+void main() => runApp(FirebaseLogin());
+
+// ignore: must_be_immutable
+class FirebaseLogin extends StatelessWidget {
 
   UserRepository userRepository = UserRepository();
 
@@ -23,31 +22,36 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        buttonTheme: ButtonThemeData(
+          height: 50,
+        ),
       ),
       home: BlocProvider(
         create: (context) => AuthBloc(userRepository: userRepository)..add(AppStartedEvent()),
-        child: Appp(userRepository: userRepository,),
+        child: MyApp(userRepository: userRepository,),
       ),
     );
   }
 }
 
-class Appp extends StatelessWidget {
+class MyApp extends StatelessWidget {
 
-  UserRepository userRepository;
+  final UserRepository userRepository;
 
-  Appp({@required this.userRepository});
+  MyApp({@required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthInitialState) {
-          return SplashPage();
+          return InitScreen(userRepository: userRepository);
         } else if (state is AuthenticatedState) {
           return HomePageParent(user: state.user, userRepository: userRepository);
         } else if (state is UnauthenticatedState) {
-          return LoginPageParent(userRepository: userRepository);
+          return InitScreen(userRepository: userRepository);
+        }else{
+          return InitScreen(userRepository: userRepository);
         }
       },
     );

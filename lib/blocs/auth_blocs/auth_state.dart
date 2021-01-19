@@ -6,24 +6,21 @@ abstract class AuthState extends Equatable {}
 
 class AuthInitialState extends AuthState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class AuthenticatedState extends AuthState {
 
-  FirebaseUser user;
+  final FirebaseUser user;
 
-  AuthenticatedState(@required this.user);
+  AuthenticatedState({@required this.user});
 
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 
 class UnauthenticatedState extends AuthState {
   @override
-  // TODO: implement props
   List<Object> get props => null;
 }
 

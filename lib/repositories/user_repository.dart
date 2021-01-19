@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login/models/UserModel.dart';
 import 'package:firebase_login/utils/error_codes.dart';
 import 'package:flutter/services.dart';
 
@@ -11,11 +12,11 @@ class UserRepository {
 
   // sign up with email
   Future<FirebaseUser> signUpUserWithEmailPass(
-      String email, String pass) async {
+      UserModel userModel) async {
     try {
       var authResult = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: pass,
+        email: userModel.email,
+        password: userModel.password,
       );
       print("REPO : ${authResult.user.email}");
       return authResult.user;
@@ -59,13 +60,13 @@ class UserRepository {
 
   // sign in with email and password
   Future<FirebaseUser> signInEmailAndPassword(
-      String email, String password) async {
+      UserModel userModel) async {
     try {
-      var authresult = await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+      var authResult = await firebaseAuth.signInWithEmailAndPassword(
+        email: userModel.email,
+        password: userModel.password,
       );
-      return authresult.user;
+      return authResult.user;
     } on PlatformException catch (e) {
       String authError = "";
       switch (e.code) {

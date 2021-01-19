@@ -1,39 +1,39 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_login/blocs/homeBloc/home_page_bloc.dart';
-import 'package:firebase_login/blocs/homeBloc/home_page_event.dart';
-import 'package:firebase_login/blocs/homeBloc/home_page_state.dart';
+import 'package:firebase_login/blocs/home_blocs/home_page_bloc.dart';
+import 'package:firebase_login/blocs/home_blocs/home_page_event.dart';
+import 'package:firebase_login/blocs/home_blocs/home_page_state.dart';
 import 'package:firebase_login/repositories/user_repository.dart';
-import 'package:firebase_login/ui/pages/signup_page.dart';
+import 'package:firebase_login/screens/init_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 class HomePageParent extends StatelessWidget {
-  FirebaseUser user;
-  UserRepository userRepository;
+  final FirebaseUser user;
+  final UserRepository userRepository;
 
   HomePageParent({@required this.user, @required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomePageBloc(userRepository: userRepository),
-      child: HomePage(user: user, userRepository: userRepository),
+      create: (context) => HomeScreenBloc(userRepository: userRepository),
+      child: HomeScreen(user: user, userRepository: userRepository),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  FirebaseUser user;
-  HomePageBloc homePageBloc;
-  UserRepository userRepository;
+// ignore: must_be_immutable
+class HomeScreen extends StatelessWidget {
+  final FirebaseUser user;
+  final UserRepository userRepository;
+  HomeScreenBloc homeScreenBloc;
 
-  HomePage({@required this.user, @required this.userRepository});
+  HomeScreen({@required this.user, @required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
-    homePageBloc = BlocProvider.of<HomePageBloc>(context);
+    homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -48,7 +48,7 @@ class HomePage extends StatelessWidget {
                 color: Colors.white,
               ),
               onPressed: () {
-                homePageBloc.add(LogOutEvent());
+                homeScreenBloc.add(LogOutEvent());
               },
             ),
           ],
@@ -60,17 +60,19 @@ class HomePage extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(user.email),
             ),
-            BlocListener<HomePageBloc, HomePageState>(
+            BlocListener<HomeScreenBloc, HomePageState>(
               listener: (context, state) {
                 if (state is LogOutSuccessState) {
                   navigateToSignUpPage(context);
                 }
               },
-              child: BlocBuilder<HomePageBloc, HomePageState>(
+              child: BlocBuilder<HomeScreenBloc, HomePageState>(
                 builder: (context, state) {
                   if (state is LogOutInitial) {
                     return Container();
                   } else if (state is LogOutSuccessState) {
+                    return Container();
+                  } else {
                     return Container();
                   }
                 },
@@ -83,8 +85,8 @@ class HomePage extends StatelessWidget {
   }
 
   void navigateToSignUpPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return SignUpPageParent(userRepository: userRepository);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return InitScreen(userRepository: userRepository);
     }));
   }
 }

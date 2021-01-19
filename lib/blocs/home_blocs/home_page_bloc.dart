@@ -6,15 +6,14 @@ import 'package:meta/meta.dart';
 import 'home_page_event.dart';
 import 'home_page_state.dart';
 
-class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
+class HomeScreenBloc extends Bloc<HomePageEvent, HomePageState> {
   UserRepository userRepository;
 
-  HomePageBloc({@required UserRepository userRepository}) {
+  HomeScreenBloc({@required UserRepository userRepository}) {
     this.userRepository = userRepository;
   }
 
   @override
-  // TODO: implement initialState
   HomePageState get initialState => LogOutInitial();
 
   @override

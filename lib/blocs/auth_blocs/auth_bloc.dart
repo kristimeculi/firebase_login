@@ -14,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   @override
-  // TODO: implement initialState
   AuthState get initialState => AuthInitialState();
 
   @override
@@ -24,7 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         var isSignedIn = await userRepository.isSignedIn();
         if (isSignedIn) {
           var user = await userRepository.getCurrentUser();
-          yield AuthenticatedState(user);
+          yield AuthenticatedState(user: user);
         } else {
           yield UnauthenticatedState();
         }
