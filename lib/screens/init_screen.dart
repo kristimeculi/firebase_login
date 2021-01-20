@@ -8,6 +8,7 @@ class InitScreen extends StatelessWidget {
   final UserRepository userRepository;
 
   InitScreen({@required this.userRepository});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -17,11 +18,14 @@ class InitScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-
               ///Logo
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Image.asset('images/logo.png'),
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  child: Image.asset('images/logo.png'),
+                ),
               ),
 
               ///90% of the free space
@@ -103,7 +107,7 @@ class InitScreen extends StatelessWidget {
               FlatButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return LoginPageParent(userRepository:  userRepository);
+                    return LoginPageParent(userRepository: userRepository);
                   }));
                 },
                 child: Text(
