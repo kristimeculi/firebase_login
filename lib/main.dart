@@ -14,10 +14,12 @@ void main() => runApp(FirebaseLogin());
 // ignore: must_be_immutable
 class FirebaseLogin extends StatelessWidget {
 
-  UserRepository userRepository = UserRepository();
 
   @override
   Widget build(BuildContext context) {
+    UserRepository userRepository = UserRepository();
+
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -38,16 +40,21 @@ class MyApp extends StatelessWidget {
 
   final UserRepository userRepository;
 
+
+
   MyApp({@required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthInitialState) {
           return InitScreen(userRepository: userRepository);
         } else if (state is AuthenticatedState) {
-          return HomePageParent(user: state.user, userRepository: userRepository);
+
+          return HomePageParent(user: state.user, userRepository: userRepository,);
+
         } else if (state is UnauthenticatedState) {
           return InitScreen(userRepository: userRepository);
         }else{

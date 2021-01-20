@@ -21,8 +21,7 @@ class InitScreen extends StatelessWidget {
               ///Logo
               Padding(
                 padding: const EdgeInsets.only(top: 20),
-                child: Image.network(
-                    'https://cdn.shopify.com/s/files/1/0274/0282/9884/files/OWG_US_Logo_red_65x.png?v=1571148504'),
+                child: Image.asset('images/logo.png'),
               ),
 
               ///90% of the free space

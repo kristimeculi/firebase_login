@@ -34,7 +34,7 @@ class SignUpScreen extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
+  TextEditingController firstnameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController streetController = TextEditingController();
   TextEditingController postalCodeController = TextEditingController();
@@ -136,7 +136,7 @@ class SignUpScreen extends StatelessWidget {
                   SizedBox(height: 5.0),
                   /// Firstname text field
                   TextFormField(
-                    controller: nameController,
+                    controller: firstnameController,
                     validator: (value)=>FormValidation.nameValidation(value),
                     cursorHeight: 22.0,
                     keyboardType: TextInputType.emailAddress,
@@ -270,8 +270,8 @@ class SignUpScreen extends StatelessWidget {
                           } else if (state is RegistrationFailure) {
                             return buildFailureUi(state.message);
                           } else if (state is RegistrationSuccessfully) {
-                            emailController.text = "";
-                            passController.text = "";
+                            //emailController.text = "";
+                            //passController.text = "";
                             return Container();
                           }else{
                             return Container();
@@ -292,11 +292,7 @@ class SignUpScreen extends StatelessWidget {
                       hoverColor: Colors.redAccent,
                       splashColor: Colors.redAccent,
                       onPressed: () {
-                        UserModel userModel = UserModel();
-                        userModel.email = emailController.text;
-                        userModel.password = passController.text;
-
-                        userRegBloc.add(SignUpButtonPressed(userModel: userModel));
+                        signUpButtonPressed();
                       },
                       child: Text(
                         "SIGN UP",
@@ -343,6 +339,22 @@ class SignUpScreen extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return LoginPageParent(userRepository: userRepository);
     }));
+  }
+
+  void signUpButtonPressed() {
+    if(_formKey.currentState.validate()){
+      UserModel userModel = UserModel();
+      userModel.email = emailController.text;
+      userModel.password = passController.text;
+      userModel.firstname = firstnameController.text;
+      userModel.phone = phoneController.text??"";
+      userModel.street = streetController.text??"";
+      userModel.postalCode = int.tryParse(postalCodeController.text)??0;
+      userModel.city = cityController.text??"";
+      userModel.country = countryController.text??"";
+
+      userRegBloc.add(SignUpButtonPressed(userModel: userModel));
+    }
   }
 
 

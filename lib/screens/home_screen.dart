@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login/blocs/home_blocs/home_page_bloc.dart';
 import 'package:firebase_login/blocs/home_blocs/home_page_event.dart';
@@ -26,6 +27,7 @@ class HomePageParent extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   final FirebaseUser user;
   final UserRepository userRepository;
+
   HomeScreenBloc homeScreenBloc;
 
   HomeScreen({@required this.user, @required this.userRepository});
@@ -44,7 +46,7 @@ class HomeScreen extends StatelessWidget {
           actions: <Widget>[
             IconButton(
               icon: Icon(
-                Icons.close,
+                Icons.exit_to_app,
                 color: Colors.white,
               ),
               onPressed: () {
@@ -53,32 +55,90 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              child: Text(user.email),
-            ),
-            BlocListener<HomeScreenBloc, HomePageState>(
-              listener: (context, state) {
-                if (state is LogOutSuccessState) {
-                  navigateToSignUpPage(context);
-                }
-              },
-              child: BlocBuilder<HomeScreenBloc, HomePageState>(
-                builder: (context, state) {
-                  if (state is LogOutInitial) {
-                    return Container();
-                  } else if (state is LogOutSuccessState) {
-                    return Container();
-                  } else {
-                    return Container();
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: <Widget>[
+
+
+              StreamBuilder(
+                stream: Firestore.instance
+                    .collection('users')
+                    .document(user.uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text("Loading");
                   }
+                  var data = snapshot.data;
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('Firstname: '),
+                          Text(data['firstname'].toString()??""),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text("Phone: "),
+                          Text(data['phone'].toString()??""),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Street: "),
+                          Text(data['street'].toString()??""),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Postal Code: "),
+                          Text(data['postal_code'].toString()??""),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("City: "),
+                          Text(data['city'].toString()??""),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Country: "),
+                          Text(data['country'].toString()??""),
+                        ],
+                      ),
+                    ],
+                  );
                 },
               ),
-            ),
-          ],
+
+
+              BlocListener<HomeScreenBloc, HomePageState>(
+                listener: (context, state) {
+                  if (state is LogOutSuccessState) {
+                    navigateToSignUpPage(context);
+                  }
+                },
+                child: BlocBuilder<HomeScreenBloc, HomePageState>(
+                  builder: (context, state) {
+                    if (state is LogOutInitial) {
+                      return Container();
+                    } else if (state is LogOutSuccessState) {
+                      return Container();
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

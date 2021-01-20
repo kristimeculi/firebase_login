@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login/models/UserModel.dart';
 import 'package:firebase_login/utils/error_codes.dart';
@@ -5,9 +6,12 @@ import 'package:flutter/services.dart';
 
 class UserRepository {
   FirebaseAuth firebaseAuth;
+  CollectionReference usersCollection = Firestore.instance.collection('users');
+  UserModel currentUser;
 
   UserRepository() {
     this.firebaseAuth = FirebaseAuth.instance;
+    this.currentUser = UserModel();
   }
 
   // sign up with email
@@ -18,8 +22,13 @@ class UserRepository {
         email: userModel.email,
         password: userModel.password,
       );
-      print("REPO : ${authResult.user.email}");
+
+      await updateUserData(userModel,authResult.user.uid).whenComplete(() {
+        currentUser = userModel;
+      });
+
       return authResult.user;
+
     } on PlatformException catch (e) {
       String authError = "";
       switch (e.code) {
@@ -120,4 +129,24 @@ class UserRepository {
   Future<FirebaseUser> getCurrentUser() async {
     return await FirebaseAuth.instance.currentUser();
   }
+
+  Future updateUserData(UserModel userModel,String uid)async{
+    print(uid);
+    return await usersCollection.document(uid).setData({
+      'firstname': userModel.firstname,
+      'phone': userModel.phone,
+      'street': userModel.street,
+      'postal_code': userModel.postalCode,
+      'city': userModel.city,
+      'country': userModel.country,
+    });
+
+  }
+
+  Future getUserData() async{
+    var user =await getCurrentUser();
+    String uid = user.uid;
+    return await usersCollection.document(uid).get();
+  }
+
 }
